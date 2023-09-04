@@ -1,0 +1,35 @@
+package `in`.hypernation.pokedex.repository
+
+import dagger.hilt.android.scopes.ActivityScoped
+import hypernation.pokedex.data.remote.responses.Pokemon
+import hypernation.pokedex.data.remote.responses.PokemonList
+import `in`.hypernation.pokedex.data.remote.PokeApi
+import `in`.hypernation.pokedex.util.Resource
+import javax.inject.Inject
+
+@ActivityScoped
+class PokemonRepository @Inject constructor(
+    private val api : PokeApi
+) {
+
+    suspend fun getPokemonList(limit : Int, offset : Int) : Resource<PokemonList> {
+        val response = try {
+            api.getPokemonList(limit, offset)
+
+        } catch (e: Exception) {
+            return Resource.Error("An unknown error occured")
+        }
+        return Resource.Success(response)
+    }
+    suspend fun getPokemon(name : String) : Resource<Pokemon> {
+        val response = try {
+            api.getPokemon(name)
+
+        } catch (e: Exception) {
+            return Resource.Error("An unknown error occured")
+        }
+        return Resource.Success(response)
+    }
+
+
+}
